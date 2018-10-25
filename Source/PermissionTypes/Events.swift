@@ -25,8 +25,8 @@
 #if PERMISSION_EVENTS
 import EventKit
 
-internal extension Permission {
-    var statusEvents: PermissionStatus {
+internal extension CTPermission {
+    var statusEvents: CTPermissionStatus {
         let status = EKEventStore.authorizationStatus(for: .event)
         
         switch status {

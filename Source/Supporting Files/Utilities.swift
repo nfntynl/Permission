@@ -44,7 +44,7 @@ extension Bundle {
     }
 }
 
-extension UIControlState: Hashable {
+extension UIControl.State: Hashable {
     public var hashValue: Int { return Int(rawValue) }
 }
 
@@ -68,8 +68,8 @@ internal extension String {
 }
 
 internal extension Selector {
-    static let tapped = #selector(PermissionButton.tapped(_:))
-    static let highlight = #selector(PermissionButton.highlight(_:))
+    static let tapped = #selector(CTPermissionButton.tapped(_:))
+    static let highlight = #selector(CTPermissionButton.highlight(_:))
     static let settingsHandler = #selector(DeniedAlert.settingsHandler)
 }
 
@@ -94,8 +94,8 @@ extension UserDefaults {
         set { set(newValue, forKey: .requestedBluetooth) }
     }
     
-    var statusBluetooth: PermissionStatus? {
-        get { return PermissionStatus(string: string(forKey: .statusBluetooth)) }
+    var statusBluetooth: CTPermissionStatus? {
+        get { return CTPermissionStatus(string: string(forKey: .statusBluetooth)) }
         set { set(newValue?.rawValue, forKey: .statusBluetooth) }
     }
     

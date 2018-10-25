@@ -22,121 +22,121 @@
 // SOFTWARE.
 //
 
-open class Permission: NSObject {
-    public typealias Callback = (PermissionStatus) -> Void
+open class CTPermission: NSObject {
+    public typealias Callback = (CTPermissionStatus) -> Void
 
     #if PERMISSION_CONTACTS
     /// The permission to access the user's contacts.
     @available(iOS 9.0, *)
-    open static let contacts = Permission(type: .contacts)
+    public static let contacts = CTPermission(type: .contacts)
     #endif
     
     #if PERMISSION_ADDRESS_BOOK
     /// The permission to access the user's address book. (Deprecated in iOS 9.0)
-    open static let addressBook = Permission(type: .addressBook)
+    public static let addressBook = CTPermission(type: .addressBook)
     #endif
     
     #if PERMISSION_LOCATION
     /// The permission to access the user's location when the app is in background.
-    open static let locationAlways = Permission(type: .locationAlways)
+    public static let locationAlways = CTPermission(type: .locationAlways)
     
     /// The permission to access the user's location when the app is in use.
-    open static let locationWhenInUse = Permission(type: .locationWhenInUse)
+    public static let locationWhenInUse = CTPermission(type: .locationWhenInUse)
     #endif
     
     #if PERMISSION_MICROPHONE
     /// The permission to access the microphone.
-    open static let microphone = Permission(type: .microphone)
+    public static let microphone = CTPermission(type: .microphone)
     #endif
     
     #if PERMISSION_CAMERA
     /// The permission to access the camera.
-    open static let camera = Permission(type: .camera)
+    public static let camera = CTPermission(type: .camera)
     #endif
     
     #if PERMISSION_PHOTOS
     /// The permission to access the user's photos.
-    open static let photos = Permission(type: .photos)
+    public static let photos = CTPermission(type: .photos)
     #endif
     
     #if PERMISSION_REMINDERS
     /// The permission to access the user's reminders.
-    open static let reminders = Permission(type: .reminders)
+    public static let reminders = CTPermission(type: .reminders)
     #endif
     
     #if PERMISSION_EVENTS
     /// The permission to access the user's events.
-    open static let events = Permission(type: .events)
+    public static let events = CTPermission(type: .events)
     #endif
     
     #if PERMISSION_BLUETOOTH
     /// The permission to access the user's bluetooth.
-    open static let bluetooth = Permission(type: .bluetooth)
+    public static let bluetooth = CTPermission(type: .bluetooth)
     #endif
     
     #if PERMISSION_MOTION
     /// The permission to access the user's motion.
-    open static let motion = Permission(type: .motion)
+    public static let motion = CTPermission(type: .motion)
     #endif
     
     #if PERMISSION_SPEECH_RECOGNIZER
     /// The permission to access the user's SpeechRecognizer.
     @available(iOS 10.0, *)
-    open static let speechRecognizer = Permission(type: .speechRecognizer)
+    public static let speechRecognizer = CTPermission(type: .speechRecognizer)
     #endif
     
     #if PERMISSION_MEDIA_LIBRARY
     /// The permission to access the user's MediaLibrary.
     @available(iOS 9.3, *)
-    open static let mediaLibrary = Permission(type: .mediaLibrary)
+    public static let mediaLibrary = CTPermission(type: .mediaLibrary)
     #endif
     
     #if PERMISSION_SIRI
     /// The permission to access the user's Siri.
     @available(iOS 10.0, *)
-    open static let siri = Permission(type: .siri)
+    public static let siri = CTPermission(type: .siri)
     #endif
 
     #if PERMISSION_NOTIFICATIONS
     /// The permission to send notifications.
-    open static let notifications: Permission = {
+    public static let notifications: CTPermission = {
         let settings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
-        return Permission(type: .notifications(settings))
+        return CTPermission(type: .notifications(settings))
     }()
     
     /// Variable used to retain the notifications permission.
-    fileprivate static var _notifications: Permission?
+    fileprivate static var _notifications: CTPermission?
     
     /// The permission to send notifications.
-    open static func notifications(types: UIUserNotificationType, categories: Set<UIUserNotificationCategory>?) -> Permission {
+    public static func notifications(types: UIUserNotificationType, categories: Set<UIUserNotificationCategory>?) -> CTPermission {
         let settings   = UIUserNotificationSettings(types: types, categories: categories)
-        let permission = Permission(type: .notifications(settings))
+        let permission = CTPermission(type: .notifications(settings))
         _notifications = permission
         return permission
     }
     
     /// The permission to send notifications.
-    open static func notifications(types: UIUserNotificationType) -> Permission {
+    public static func notifications(types: UIUserNotificationType) -> CTPermission {
         let settings   = UIUserNotificationSettings(types: types, categories: nil)
-        let permission = Permission(type: .notifications(settings))
+        let permission = CTPermission(type: .notifications(settings))
         _notifications = permission
         return permission
     }
     
     /// The permission to send notifications.
-    open static func notifications(categories: Set<UIUserNotificationCategory>?) -> Permission {
+    public static func notifications(categories: Set<UIUserNotificationCategory>?) -> CTPermission {
         let settings  = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: categories)
-        let permission = Permission(type: .notifications(settings))
+        let permission = CTPermission(type: .notifications(settings))
         _notifications = permission
         return permission
     }
     #endif
     
     /// The permission domain.
-    open let type: PermissionType
+    public let type: CTPermissionType
     
     /// The permission status.
-    open var status: PermissionStatus {
+    public var status: CTPermissionStatus {
         #if PERMISSION_CONTACTS
         if case .contacts = type { return statusContacts }
         #endif
@@ -201,7 +201,7 @@ open class Permission: NSObject {
     open var presentPrePermissionAlert = false
     
     /// The pre-permission alert.
-    open lazy var prePermissionAlert: PermissionAlert = {
+    open lazy var prePermissionAlert: CTPermissionAlert = {
         return PrePermissionAlert(permission: self)
     }()
     
@@ -209,7 +209,7 @@ open class Permission: NSObject {
     open var presentDeniedAlert = true
     
     /// The alert when the permission was denied.
-    open lazy var deniedAlert: PermissionAlert = {
+    open lazy var deniedAlert: CTPermissionAlert = {
         return DeniedAlert(permission: self)
     }()
     
@@ -217,13 +217,13 @@ open class Permission: NSObject {
     open var presentDisabledAlert = true
     
     /// The alert when the permission is disabled.
-    open lazy var disabledAlert: PermissionAlert = {
+    open lazy var disabledAlert: CTPermissionAlert = {
         return DisabledAlert(permission: self)
     }()
     
     internal var callback: Callback?
     
-    internal var permissionSets: [PermissionSet] = []
+    internal var permissionSets: [CTPermissionSet] = []
     
     /**
      Creates and return a new permission for the specified domain.
@@ -232,7 +232,7 @@ open class Permission: NSObject {
      
      - returns: A newly created permission.
      */
-    fileprivate init(type: PermissionType) {
+    fileprivate init(type: CTPermissionType) {
         self.type = type
     }
     
@@ -365,7 +365,7 @@ open class Permission: NSObject {
         fatalError()
     }
     
-    internal func callbacks(_ with: PermissionStatus) {
+    internal func callbacks(_ with: CTPermissionStatus) {
         DispatchQueue.main.async {
             self.callback?(self.status)
             self.permissionSets.forEach { $0.didRequestPermission(self) }
@@ -373,7 +373,7 @@ open class Permission: NSObject {
     }
 }
 
-extension Permission {
+extension CTPermission {
     /// The textual representation of self.
     override open var description: String {
         return type.description

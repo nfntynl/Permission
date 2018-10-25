@@ -25,8 +25,8 @@
 #if PERMISSION_CONTACTS
 import Contacts
 
-internal extension Permission {
-    var statusContacts: PermissionStatus {
+internal extension CTPermission {
+    var statusContacts: CTPermissionStatus {
         guard #available(iOS 9.0, *) else { fatalError() }
         
         let status = CNContactStore.authorizationStatus(for: .contacts)

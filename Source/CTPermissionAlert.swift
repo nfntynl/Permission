@@ -22,17 +22,17 @@
 // SOFTWARE.
 //
 
-open class PermissionAlert {
+open class CTPermissionAlert {
     /// The permission.
-    fileprivate let permission: Permission
+    fileprivate let permission: CTPermission
     
     /// The status of the permission.
-    fileprivate var status: PermissionStatus { return permission.status }
+    fileprivate var status: CTPermissionStatus { return permission.status }
     
     /// The domain of the permission.
-    fileprivate var type: PermissionType { return permission.type }
+    fileprivate var type: CTPermissionType { return permission.type }
     
-    fileprivate var callbacks: Permission.Callback { return permission.callbacks }
+    fileprivate var callbacks: CTPermission.Callback { return permission.callbacks }
     
     /// The title of the alert.
     open var title: String?
@@ -70,7 +70,7 @@ open class PermissionAlert {
         return controller
     }
     
-    internal init(permission: Permission) {
+    internal init(permission: CTPermission) {
         self.permission = permission
     }
     
@@ -85,8 +85,8 @@ open class PermissionAlert {
     }
 }
 
-internal class DisabledAlert: PermissionAlert {
-    override init(permission: Permission) {
+internal class DisabledAlert: CTPermissionAlert {
+    override init(permission: CTPermission) {
         super.init(permission: permission)
         
         title   = "\(permission) is currently disabled"
@@ -95,7 +95,7 @@ internal class DisabledAlert: PermissionAlert {
     }
 }
 
-internal class DeniedAlert: PermissionAlert {
+internal class DeniedAlert: CTPermissionAlert {
     override var controller: UIAlertController {
         let controller = super.controller
         
@@ -109,7 +109,7 @@ internal class DeniedAlert: PermissionAlert {
         return controller
     }
     
-    override init(permission: Permission) {
+    override init(permission: CTPermission) {
         super.init(permission: permission)
         
         title    = "Permission for \(permission) was denied"
@@ -119,20 +119,20 @@ internal class DeniedAlert: PermissionAlert {
     }
     
     @objc func settingsHandler() {
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification)
         callbacks(status)
     }
     
     private func settingsHandler(_ action: UIAlertAction) {
-        NotificationCenter.default.addObserver(self, selector: .settingsHandler, name: .UIApplicationDidBecomeActive)
+        NotificationCenter.default.addObserver(self, selector: .settingsHandler, name: UIApplication.didBecomeActiveNotification)
         
-        if let URL = URL(string: UIApplicationOpenSettingsURLString) {
+        if let URL = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.openURL(URL)
         }
     }
 }
 
-internal class PrePermissionAlert: PermissionAlert {
+internal class PrePermissionAlert: CTPermissionAlert {
     override var controller: UIAlertController {
         let controller = super.controller
         
@@ -146,7 +146,7 @@ internal class PrePermissionAlert: PermissionAlert {
         return controller
     }
     
-    override init(permission: Permission) {
+    override init(permission: CTPermission) {
         super.init(permission: permission)
         
         title   = "\(Bundle.main.name) would like to access your \(permission)"

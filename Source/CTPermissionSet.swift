@@ -22,16 +22,16 @@
 // SOFTWARE.
 //
 
-open class PermissionSet {
+open class CTPermissionSet {
     
     /// The permissions in the set.
-    open let permissions: Set<Permission>
+    public let permissions: Set<CTPermission>
     
     /// The delegate of the permission set.
     open weak var delegate: PermissionSetDelegate?
     
     /// The permission set status
-    open var status: PermissionStatus {
+    open var status: CTPermissionStatus {
         let statuses = permissions.map({ $0.status })
         
         for status in statuses where status == .denied {
@@ -56,7 +56,7 @@ open class PermissionSet {
      
      - returns: A newly created set.
      */
-    public convenience init(_ buttons: PermissionButton...) {
+    public convenience init(_ buttons: CTPermissionButton...) {
         self.init(buttons: buttons)
     }
     
@@ -67,7 +67,7 @@ open class PermissionSet {
      
      - returns: A newly created set.
      */
-    public convenience init(_ buttons: [PermissionButton]) {
+    public convenience init(_ buttons: [CTPermissionButton]) {
         self.init(buttons: buttons)
     }
     
@@ -78,7 +78,7 @@ open class PermissionSet {
      
      - returns: A newly created set.
      */
-    public convenience init(_ permissions: Permission...) {
+    public convenience init(_ permissions: CTPermission...) {
         self.init(permissions: permissions)
     }
     
@@ -89,31 +89,31 @@ open class PermissionSet {
      
      - returns: A newly created set.
      */
-    public convenience init(_ permissions: [Permission]) {
+    public convenience init(_ permissions: [CTPermission]) {
         self.init(permissions: permissions)
     }
     
-    fileprivate convenience init(buttons: [PermissionButton]) {
+    fileprivate convenience init(buttons: [CTPermissionButton]) {
         let permissions = buttons.map({ $0.permission })
         
         self.init(permissions: permissions)
     }
     
-    fileprivate init(permissions: [Permission]) {
+    fileprivate init(permissions: [CTPermission]) {
         self.permissions = Set(permissions)
         self.permissions.forEach { $0.permissionSets.append(self) }
     }
     
-    internal func willRequestPermission(_ permission: Permission) {
+    internal func willRequestPermission(_ permission: CTPermission) {
         delegate?.permissionSet(self, willRequestPermission: permission)
     }
     
-    internal func didRequestPermission(_ permission: Permission) {
+    internal func didRequestPermission(_ permission: CTPermission) {
         delegate?.permissionSet(self, didRequestPermission: permission)
     }
 }
 
-extension PermissionSet: CustomStringConvertible {
+extension CTPermissionSet: CustomStringConvertible {
     /// The textual representation of self.
     public var description: String {
         return [
@@ -131,7 +131,7 @@ public protocol PermissionSetDelegate: class {
      - parameter permissionSet: The permission set containing the requested permission.
      - parameter permission:    The requested permission.
      */
-    func permissionSet(_ permissionSet: PermissionSet, didRequestPermission permission: Permission)
+    func permissionSet(_ permissionSet: CTPermissionSet, didRequestPermission permission: CTPermission)
     
     /**
      Tells the delegate that the specified permission will be requested.
@@ -139,7 +139,7 @@ public protocol PermissionSetDelegate: class {
      - parameter permissionSet: The permission set containing the requested permission.
      - parameter permission:    The requested permission.
      */
-    func permissionSet(_ permissionSet: PermissionSet, willRequestPermission permission: Permission)
+    func permissionSet(_ permissionSet: CTPermissionSet, willRequestPermission permission: CTPermission)
 }
 
 public extension PermissionSetDelegate {
@@ -149,7 +149,7 @@ public extension PermissionSetDelegate {
      - parameter permissionSet: The permission set containing the requested permission.
      - parameter permission:    The requested permission.
      */
-    func permissionSet(_ permissionSet: PermissionSet, didRequestPermission permission: Permission) {}
+    func permissionSet(_ permissionSet: CTPermissionSet, didRequestPermission permission: CTPermission) {}
     
     /**
      Tells the delegate that the specified permission will be requested.
@@ -157,5 +157,5 @@ public extension PermissionSetDelegate {
      - parameter permissionSet: The permission set containing the requested permission.
      - parameter permission:    The requested permission.
      */
-    func permissionSet(_ permissionSet: PermissionSet, willRequestPermission permission: Permission) {}
+    func permissionSet(_ permissionSet: CTPermissionSet, willRequestPermission permission: CTPermission) {}
 }

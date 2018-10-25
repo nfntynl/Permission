@@ -25,8 +25,8 @@
 #if PERMISSION_ADDRESS_BOOK
 import AddressBook
 
-internal extension Permission {
-    var statusAddressBook: PermissionStatus {
+internal extension CTPermission {
+    var statusAddressBook: CTPermissionStatus {
         let status = ABAddressBookGetAuthorizationStatus()
         
         switch status {

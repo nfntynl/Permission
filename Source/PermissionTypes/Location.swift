@@ -30,7 +30,7 @@ internal let LocationManager = CLLocationManager()
 private var requestedLocation = false
 private var triggerCallbacks  = false
 
-extension Permission: CLLocationManagerDelegate {
+extension CTPermission: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch (requestedLocation, triggerCallbacks) {
         case (true, false):
@@ -47,7 +47,7 @@ extension Permission: CLLocationManagerDelegate {
 
 
 extension CLLocationManager {
-    func request(_ permission: Permission) {
+    func request(_ permission: CTPermission) {
         delegate = permission
         
         requestedLocation = true

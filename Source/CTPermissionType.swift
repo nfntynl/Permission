@@ -22,7 +22,7 @@
 // SOFTWARE.
 //
 
-public enum PermissionType {
+public enum CTPermissionType {
     #if PERMISSION_CONTACTS
     @available(iOS 9.0, *) case contacts
     #endif
@@ -81,7 +81,7 @@ public enum PermissionType {
     #endif
 }
 
-extension PermissionType: CustomStringConvertible {
+extension CTPermissionType: CustomStringConvertible {
     public var description: String {
         #if PERMISSION_CONTACTS
         if case .contacts = self { return "Contacts" }

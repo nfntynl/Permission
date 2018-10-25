@@ -25,8 +25,8 @@
 #if PERMISSION_SIRI
 import Intents
     
-internal extension Permission {
-    var statusSiri: PermissionStatus {
+internal extension CTPermission {
+    var statusSiri: CTPermissionStatus {
         guard #available(iOS 10.0, *) else { fatalError() }
         let status = INPreferences.siriAuthorizationStatus()
         switch status {

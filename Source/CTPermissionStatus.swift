@@ -22,7 +22,7 @@
 // SOFTWARE.
 //
 
-public enum PermissionStatus: String {
+public enum CTPermissionStatus: String {
     case authorized    = "Authorized"
     case denied        = "Denied"
     case disabled      = "Disabled"
@@ -34,7 +34,7 @@ public enum PermissionStatus: String {
     }
 }
 
-extension PermissionStatus: CustomStringConvertible {
+extension CTPermissionStatus: CustomStringConvertible {
     /// The textual representation of self.
     public var description: String {
         return rawValue
